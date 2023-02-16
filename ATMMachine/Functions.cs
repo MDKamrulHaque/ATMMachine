@@ -73,7 +73,7 @@ namespace ATMMachine
                 {
                     userAccount.AccountBalance -= userSendAmount;
                     AccToSendMoneyTo.AccountBalance += userSendAmount;
-                    Console.WriteLine($"Transfer complete, we have sent {userSendAmount:£} to {AccToSendMoneyTo.AccountHolderName}");
+                    Console.WriteLine($"Transfer complete, we have sent {userSendAmount} to {AccToSendMoneyTo.AccountHolderName}");
                 }
             }
             else
