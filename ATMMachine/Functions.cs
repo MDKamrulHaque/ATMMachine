@@ -46,6 +46,42 @@ namespace ATMMachine
             }
         }
 
- 
+        internal static void TransferMoney(string withDraw, Account userAccount, ListOfAllAccounts accountList)
+        {
+            Console.WriteLine($"Sure {userAccount.AccountHolderName}, but I will need their account details");
+            Console.WriteLine("Please provide me with their account number");
+            int receiverAccNumb = Convert.ToInt32(Console.ReadLine());
+            Console.WriteLine("Please provide the account holder's name");
+            string receiverAccName = Console.ReadLine();
+
+            Account AccToSendMoneyTo = accountList.accounts.FirstOrDefault(a => a.AccountNumber == receiverAccNumb && a.AccountHolderName == receiverAccName);
+
+            if (AccToSendMoneyTo != null)
+            {
+                Console.WriteLine($"Finally, please tell me how much you would like to transfer");
+                decimal userSendAmount = Convert.ToDecimal(Console.ReadLine());
+
+                if (userSendAmount <= 0)
+                {
+                    Console.WriteLine("Invalid amount, transfer amount must be greater than 0");
+                }
+                else if (userSendAmount > userAccount.AccountBalance)
+                {
+                    Console.WriteLine("Insufficient funds, transfer amount cannot exceed account balance");
+                }
+                else
+                {
+                    userAccount.AccountBalance -= userSendAmount;
+                    AccToSendMoneyTo.AccountBalance += userSendAmount;
+                    Console.WriteLine($"Transfer complete, we have sent {userSendAmount:£} to {AccToSendMoneyTo.AccountHolderName}");
+                }
+            }
+            else
+            {
+                Console.WriteLine("Invalid account number or account holder's name. Please try again.");
+            }
+
+            Console.WriteLine("");
+        }
     }
 }

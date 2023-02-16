@@ -7,7 +7,7 @@ string exit = "EXIT";
 string withDraw = "WITHDRAW";
 string deposit = "DEPOSIT";
 string viewBalance = "BALANCE";
-
+string transfer = "TRANSFER";
 
 string userInput = "";
 
@@ -46,6 +46,10 @@ do
         } else if (userSelectionMenu.Equals(viewBalance))
         {
             Functions.ViewBalance(viewBalance, userAccount);
+        }
+        else if (userSelectionMenu.Equals(transfer))
+        {
+            Functions.TransferMoney(transfer, userAccount, accountList);
         }
 
     }
