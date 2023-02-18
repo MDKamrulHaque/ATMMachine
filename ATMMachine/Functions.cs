@@ -9,79 +9,167 @@ namespace ATMMachine
    
     internal class Functions
     {
-       internal static void DepositMoney(string deposit, Account userAccount)
+       internal static void DepositMoney(Account userAccount)
         {
-            Console.WriteLine($"Sure {userAccount.AccountHolderName}, please tell me how much would like to deposit");
+            Console.Clear();
+            Console.WriteLine("\n---------Deposit Service---------\n");
+            Console.WriteLine($"\nhow much would you like to deposit\n");
             decimal userDepositAmount = Convert.ToDecimal(Console.ReadLine());
             if (userDepositAmount <= 5)
             {
-                Console.WriteLine("Invalid, mimum amount must be 5");
+               
+                Console.WriteLine("\nInvalid, minimum amount must be £5");
+                Console.WriteLine("\nTo go back to main menu press any key");
+                Console.ReadLine();
+                Console.Clear();
+            }
+            else if (userDepositAmount > 500)
+            {
+                
+                Console.WriteLine("\nDeposit amount cannot be more than £500\n");
+                Console.WriteLine("\nTo go back to main menu press any key");
+                Console.ReadLine();
+                Console.Clear();
+            }
+            else if(userDepositAmount <= 500)
+            {
+                userAccount.AccountBalance += userDepositAmount;
+               
+                Console.WriteLine($"\nYou Deposited £{userDepositAmount}. \n\nYour new balance is £{userAccount.AccountBalance}\n");
+                Console.WriteLine("\nTo go back to main menu press any key");
+                Console.ReadLine();
+                Console.Clear();
             }
             else
             {
-                userAccount.AccountBalance += userDepositAmount;
+                Console.WriteLine("\nError: somthing went wrong please try again.\n");
+                Console.WriteLine("\nTo go back to main menu press any key");
+                Console.ReadLine();
+                Console.Clear();
 
-                Console.WriteLine($"You have deposited {userDepositAmount}. Your new balance is {userAccount.AccountBalance}\n");
             }
         }
 
-        internal static void ViewBalance(string viewBalance, Account userAccount)
+        internal static void ViewBalance(Account userAccount)
         {
-            Console.WriteLine($"\nYour current Balance is {userAccount.AccountBalance}\n");
+            Console.Clear();
+            Console.WriteLine("\n---------Account Balance Service---------\n");
+            Console.WriteLine($"\nHi {userAccount.AccountHolderName}, Your current Balance is £{userAccount.AccountBalance}\n");
+            Console.WriteLine("\nTo go back to main menu press any key");
+            Console.ReadLine();
+            Console.Clear();
         }
 
-        internal static void WithDrawMoney(string withDraw, Account userAccount)
+        internal static void WithDrawMoney(Account userAccount)
         {
-            Console.WriteLine($"Sure {userAccount.AccountHolderName}, please tell me how much would like to take out");
+            Console.Clear();
+            Console.WriteLine("\n---------Withdraw Service---------\n");
+            Console.WriteLine($"\nhow much would you like to take out\n");
             decimal userWithDrawAmount = Convert.ToDecimal(Console.ReadLine());
             if (userWithDrawAmount <= 5)
             {
-                Console.WriteLine("Invalid, mimum amount must be 5");
+                
+                Console.WriteLine("\nInvalid, minimum amount must be £5");
+                Console.WriteLine("\nTo go back to main menu press any key");
+                Console.ReadLine();
+                Console.Clear();
+            }
+            else if(userWithDrawAmount > 500 || userWithDrawAmount> userAccount.AccountBalance)
+            {
+                
+                Console.WriteLine("\nNot possible! amount cannot exceed account balance or be more than £500\n");
+                Console.WriteLine("\nTo go back to main menu press any key");
+                Console.ReadLine();
+                Console.Clear();
+            }
+            else if(userWithDrawAmount <= 500)
+            {
+                userAccount.AccountBalance -= userWithDrawAmount;
+                Console.WriteLine($"\nYou toke out £{userWithDrawAmount}. Your new balance is £{userAccount.AccountBalance}\n");
+                Console.WriteLine("\nTo go back to main menu press any key");
+                Console.ReadLine();
+                Console.Clear();
             }
             else
             {
-                userAccount.AccountBalance -= userWithDrawAmount;
+                Console.WriteLine("\nError: somthing went wrong please try again.\n");
+                Console.WriteLine("\nTo go back to main menu press any key");
+                Console.ReadLine();
+                Console.Clear();
 
-                Console.WriteLine($"You have toke out {userWithDrawAmount}. Your new balance is {userAccount.AccountBalance}\n");
             }
         }
 
-        internal static void TransferMoney(string withDraw, Account userAccount, ListOfAllAccounts accountList)
+        internal static void TransferMoney(Account userAccount, ListOfAllAccounts accountList)
         {
-            Console.WriteLine($"Sure {userAccount.AccountHolderName}, but I will need their account details");
-            Console.WriteLine("Please provide me with their account number");
-            int receiverAccNumb = Convert.ToInt32(Console.ReadLine());
-            Console.WriteLine("Please provide the account holder's name");
+            Console.Clear();
+            Console.WriteLine("\n---------Transfer Service---------\n");
+            Console.WriteLine("\nplease provide the account holder's name\n");
             string receiverAccName = Console.ReadLine();
+            Console.WriteLine($"\nNow, enter their account number\n");
+            int receiverAccNumb = Convert.ToInt32(Console.ReadLine());
 
-            Account AccToSendMoneyTo = accountList.accounts.FirstOrDefault(a => a.AccountNumber == receiverAccNumb && a.AccountHolderName == receiverAccName);
-
-            if (AccToSendMoneyTo != null)
+            Console.WriteLine($"\nYou entered" +
+                              $"\n\nAccount Holder Name: {receiverAccName} " +
+                              $"\nAccount Number: {receiverAccNumb} " +
+                              $"\n\ndo you wish to continue? type 'y' or 'n'\n");
+            string userYesOrNo = Console.ReadLine();
+            if (userYesOrNo.Equals("y"))
             {
-                Console.WriteLine($"Finally, please tell me how much you would like to transfer");
-                decimal userSendAmount = Convert.ToDecimal(Console.ReadLine());
+                Account AccToSendMoneyTo = accountList.accounts.FirstOrDefault(a => a.AccountNumber == receiverAccNumb && a.AccountHolderName == receiverAccName);
+               
+                if (AccToSendMoneyTo != null)
+                {
+                    Console.WriteLine($"\nHow much you would like to transfer\n");
+                    decimal userSendAmount = Convert.ToDecimal(Console.ReadLine());
 
-                if (userSendAmount <= 0)
-                {
-                    Console.WriteLine("Invalid amount, transfer amount must be greater than 0");
-                }
-                else if (userSendAmount > userAccount.AccountBalance)
-                {
-                    Console.WriteLine("Insufficient funds, transfer amount cannot exceed account balance");
+                    if (userSendAmount <= 0)
+                    {
+                        Console.WriteLine("\nInvalid amount, transfer amount must be greater than £0\n");
+                        Console.WriteLine("\nTo go back to main menu press any key");
+                        Console.ReadLine();
+                        Console.Clear();
+                    }
+                    else if (userSendAmount > userAccount.AccountBalance || userSendAmount > 500)
+                    {
+                        Console.WriteLine("\ntransfer amount cannot exceed account balance or be more than £500\n");
+                        Console.WriteLine("\nTo go back to main menu press any key");
+                        Console.ReadLine();
+                        Console.Clear();
+                    }
+                    else
+                    {
+                        userAccount.AccountBalance -= userSendAmount;
+                        AccToSendMoneyTo.AccountBalance += userSendAmount;
+                        Console.WriteLine($"\nTransaction complete, £{userSendAmount} sent to {AccToSendMoneyTo.AccountHolderName}\n");
+                        Console.WriteLine("\nTo go back to main menu press any key");
+                        Console.ReadLine();
+                        Console.Clear();
+                    }
                 }
                 else
                 {
-                    userAccount.AccountBalance -= userSendAmount;
-                    AccToSendMoneyTo.AccountBalance += userSendAmount;
-                    Console.WriteLine($"Transfer complete, we have sent {userSendAmount} to {AccToSendMoneyTo.AccountHolderName}");
+                    Console.WriteLine("\nError: Account holder's name & number doesn't match. Please try again.\n");
+                    Console.WriteLine("\nTo go back to main menu press any key");
+                    Console.ReadLine();
+                    Console.Clear();
                 }
+            } else if (userYesOrNo.Equals("n"))
+            {
+               
+                Console.WriteLine("\nTransaction cancelled!\n");
+                Console.WriteLine("\nTo go back to main menu press any key");
+                Console.ReadLine();
+                Console.Clear();
             }
             else
             {
-                Console.WriteLine("Invalid account number or account holder's name. Please try again.");
+                Console.WriteLine("\nError: Account holder's name & number doesn't match. Please try again.\n");
+                Console.WriteLine("\nTo go back to main menu press any key");
+                Console.ReadLine();
+                Console.Clear();
             }
 
-            Console.WriteLine("");
         }
     }
 }

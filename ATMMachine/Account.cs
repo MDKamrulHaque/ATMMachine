@@ -17,6 +17,3 @@ namespace ATMMachine
     }
 
 }
-
-//project notes
-// should not be able to send money to myself 
